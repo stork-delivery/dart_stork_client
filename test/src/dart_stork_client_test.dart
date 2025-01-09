@@ -95,5 +95,15 @@ void main() {
         ).called(1);
       });
     });
+
+    group('dispose', () {
+      test('closes the http client', () {
+        when(() => httpClient.close()).thenReturn(null);
+
+        client.dispose();
+
+        verify(() => httpClient.close()).called(1);
+      });
+    });
   });
 }
