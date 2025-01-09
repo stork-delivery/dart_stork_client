@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dart_stork_client/dart_stork_client.dart';
 import 'package:http/http.dart' as http;
 
 /// {@template dart_stork_client}
@@ -13,7 +16,7 @@ class DartStorkClient {
   final _client = http.Client();
 
   /// Fetches app information by its ID.
-  Future<StorkApp> getApp(String appId) async {
+  Future<StorkApp> getApp(int appId) async {
     final response = await _client.get(
       Uri.parse('$_baseUrl/v1/apps/$appId'),
     );
