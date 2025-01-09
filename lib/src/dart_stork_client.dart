@@ -10,10 +10,12 @@ class DartStorkClient {
   /// {@macro dart_stork_client}
   DartStorkClient({
     String? baseUrl,
-  }) : _baseUrl = baseUrl ?? 'https://stork.erickzanardoo.workers.dev';
+    http.Client? client,
+  })  : _baseUrl = baseUrl ?? 'https://stork.erickzanardoo.workers.dev',
+        _client = client ?? http.Client();
 
   final String _baseUrl;
-  final _client = http.Client();
+  final http.Client _client;
 
   /// Fetches app information by its ID.
   Future<StorkApp> getApp(int appId) async {
@@ -30,6 +32,7 @@ class DartStorkClient {
   }
 
   /// Closes the client and cleans up resources.
+  /// Only call this if you provided your own client.
   void dispose() {
     _client.close();
   }
