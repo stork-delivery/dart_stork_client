@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:dart_stork_client/dart_stork_client.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,23 @@ class DartStorkClient {
 
     final json = jsonDecode(response.body) as Map<String, dynamic>;
     return StorkApp.fromJson(json);
+  }
+
+  /// Downloads an artifact from an app and its version.
+  Future<Uint8List> downloadArtifact({
+    required int appId,
+    required String version,
+    required String platform,
+  }) async {
+    final response = await _client.get(
+      Uri.parse('$_baseUrl/v1/apps/$appId/download/$version/$platform'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to download artifact: ${response.statusCode}');
+    }
+
+    return response.bodyBytes;
   }
 
   /// Closes the client and cleans up resources.

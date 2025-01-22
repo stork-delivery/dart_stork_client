@@ -21,11 +21,23 @@ void main() {
           'id': 1,
           'name': 'test',
           'versions': ['1.0.0', '1.0.1'],
+          'lastVersion': '1.0.1',
         });
 
         expect(app.id, equals(1));
         expect(app.name, equals('test'));
         expect(app.versions, equals(['1.0.0', '1.0.1']));
+        expect(app.lastVersion, equals('1.0.1'));
+      });
+
+      test('handles null lastVersion', () {
+        final app = StorkApp.fromJson({
+          'id': 1,
+          'name': 'test',
+          'versions': ['1.0.0', '1.0.1'],
+        });
+
+        expect(app.lastVersion, isNull);
       });
 
       test('throws when id is not an int', () {
