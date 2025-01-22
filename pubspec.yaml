@@ -1,7 +1,7 @@
 name: dart_stork_client
 description: Dart package to access apps open APIs
-version: 0.1.0+1
-publish_to: none
+version: 0.0.1
+homepage: https://github.com/stork-delivery/dart_stork_client
 
 environment:
   sdk: ^3.5.0
