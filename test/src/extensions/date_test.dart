@@ -5,8 +5,8 @@ void main() {
   group('DateExtension', () {
     group('serialize', () {
       test('converts DateTime to UTC ISO string', () {
-        final date = DateTime(2025, 1, 31, 19, 46, 45);
-        expect(date.serialize(), equals('2025-01-31T22:46:45.000Z'));
+        final date = DateTime.utc(2025, 1, 31, 19, 46, 45);
+        expect(date.serialize(), equals('2025-01-31T19:46:45.000Z'));
       });
     });
 
