@@ -49,6 +49,45 @@ class DartStorkClient {
     return response.bodyBytes;
   }
 
+  /// Lists all news, paginated, from an app
+  Future<List<StorkAppNews>> listNews({
+    required int appId,
+    required int page,
+    required int perPage,
+  }) async {
+    final response = await _client.get(
+      Uri.parse(
+        '$_baseUrl/v1/apps/$appId/news?page=$page&perPage=$perPage',
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to list news: ${response.statusCode}');
+    }
+
+    return (json.decode(response.body) as List)
+        .map((e) => StorkAppNews.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// Get a single news from an app
+  Future<StorkAppNews> getNews({
+    required int appId,
+    required int newsId,
+  }) async {
+    final response = await _client.get(
+      Uri.parse('$_baseUrl/v1/apps/$appId/news/$newsId'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get news: ${response.statusCode}');
+    }
+
+    return StorkAppNews.fromJson(
+      json.decode(response.body) as Map<String, dynamic>,
+    );
+  }
+
   /// Closes the client and cleans up resources.
   /// Only call this if you provided your own client.
   void dispose() {

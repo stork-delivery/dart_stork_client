@@ -184,5 +184,124 @@ void main() {
         ).called(1);
       });
     });
+
+    group('listNews', () {
+      test('makes correct http request and parses response', () async {
+        when(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news?page=1&perPage=10',
+            ),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonEncode([
+              {
+                'id': 1,
+                'title': 'Test News',
+                'content': 'Test Content',
+                'createdAt': '2025-01-31T19:19:02Z',
+              }
+            ]),
+            200,
+          ),
+        );
+
+        final news = await client.listNews(
+          appId: 1,
+          page: 1,
+          perPage: 10,
+        );
+
+        expect(news.length, equals(1));
+        expect(news.first.id, equals(1));
+        expect(news.first.title, equals('Test News'));
+        expect(news.first.content, equals('Test Content'));
+
+        verify(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news?page=1&perPage=10',
+            ),
+          ),
+        ).called(1);
+      });
+
+      test('throws exception on error response', () async {
+        when(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news?page=1&perPage=10',
+            ),
+          ),
+        ).thenAnswer((_) async => http.Response('', 404));
+
+        expect(
+          () => client.listNews(
+            appId: 1,
+            page: 1,
+            perPage: 10,
+          ),
+          throwsException,
+        );
+      });
+    });
+
+    group('getNews', () {
+      test('makes correct http request and parses response', () async {
+        when(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news/1',
+            ),
+          ),
+        ).thenAnswer(
+          (_) async => http.Response(
+            jsonEncode({
+              'id': 1,
+              'title': 'Test News',
+              'content': 'Test Content',
+              'createdAt': '2025-01-31T19:19:02Z',
+            }),
+            200,
+          ),
+        );
+
+        final news = await client.getNews(
+          appId: 1,
+          newsId: 1,
+        );
+
+        expect(news.id, equals(1));
+        expect(news.title, equals('Test News'));
+        expect(news.content, equals('Test Content'));
+
+        verify(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news/1',
+            ),
+          ),
+        ).called(1);
+      });
+
+      test('throws exception on error response', () async {
+        when(
+          () => httpClient.get(
+            Uri.parse(
+              'https://stork.erickzanardoo.workers.dev/v1/apps/1/news/1',
+            ),
+          ),
+        ).thenAnswer((_) async => http.Response('', 404));
+
+        expect(
+          () => client.getNews(
+            appId: 1,
+            newsId: 1,
+          ),
+          throwsException,
+        );
+      });
+    });
   });
 }
